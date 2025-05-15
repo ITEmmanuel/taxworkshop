@@ -9,6 +9,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 import os
+import requests
 
 def home(request):
     context = {
@@ -107,6 +108,46 @@ def dashboard_delete(request, pk):
         participant.delete()
         return redirect('dashboard')
     return render(request, 'register.html', {'form': None, 'delete_confirm': True, 'participant': participant})
+
+@login_required
+def dashboard_payment_action(request, pk):
+    participant = get_object_or_404(Participant, pk=pk)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'approve':
+            participant.payment_status = 'approved'
+            subject = 'Payment Approved - Tax Workshop'
+            message = f"Dear {participant.full_name},\n\nYour payment for the Tax Workshop has been approved. See you on the event date!\n\nBest regards,\nTax Workshop Team"
+        elif action == 'decline':
+            participant.payment_status = 'declined'
+            subject = 'Payment Declined - Tax Workshop'
+            message = f"Dear {participant.full_name},\n\nUnfortunately, your payment could not be confirmed. Please re-register or confirm with your bank as payment does not appear to have been received.\n\nBest regards,\nTax Workshop Team"
+        else:
+            return redirect('dashboard')
+        participant.save()
+        # Send email via Resend API
+        resend_api_key = os.environ.get('RESEND_API_KEY')
+        if resend_api_key:
+            try:
+                response = requests.post(
+                    'https://api.resend.com/emails',
+                    headers={
+                        'Authorization': f'Bearer {resend_api_key}',
+                        'Content-Type': 'application/json'
+                    },
+                    json={
+                        'from': 'noreply@taxworkshop.com',
+                        'to': [participant.email],
+                        'subject': subject,
+                        'text': message
+                    },
+                    timeout=10
+                )
+                response.raise_for_status()
+            except Exception as e:
+                print(f"Failed to send email: {e}")
+        return redirect('dashboard')
+    return redirect('dashboard')
 
 
 def login_view(request):

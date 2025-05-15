@@ -62,13 +62,31 @@
                 <a href="{{ participant.proof_of_payment.url }}" target="_blank" class="text-blue-600 hover:underline">View</a>
               {% else %}-{% endif %}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap flex gap-2">
-              <a href="{% url 'dashboard_edit' participant.id %}" class="text-blue-600 hover:underline">Edit</a>
-              <form method="post" action="{% url 'dashboard_delete' participant.id %}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="text-red-600 hover:underline" onclick="return confirm('Are you sure you want to delete this participant?');">Delete</button>
-              </form>
-            </td>
+            <td class="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
+  <a href="{% url 'dashboard_edit' participant.id %}" class="text-blue-600 hover:underline">Edit</a>
+  <form method="post" action="{% url 'dashboard_delete' participant.id %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="text-red-600 hover:underline" onclick="return confirm('Are you sure you want to delete this participant?');">Delete</button>
+  </form>
+  {% if participant.payment_status == 'pending' %}
+    <form method="post" action="{% url 'dashboard_payment_action' participant.id %}" class="inline">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="approve">
+      <button type="submit" class="ml-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Approve</button>
+    </form>
+    <form method="post" action="{% url 'dashboard_payment_action' participant.id %}" class="inline">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="decline">
+      <button type="submit" class="ml-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Decline</button>
+    </form>
+  {% else %}
+    {% if participant.payment_status == 'approved' %}
+      <span class="ml-2 px-3 py-1 rounded bg-green-100 text-green-800 text-xs font-semibold">Approved</span>
+    {% elif participant.payment_status == 'declined' %}
+      <span class="ml-2 px-3 py-1 rounded bg-red-100 text-red-800 text-xs font-semibold">Declined</span>
+    {% endif %}
+  {% endif %}
+</td>
           </tr>
           {% empty %}
           <tr><td colspan="8" class="text-center py-8 text-gray-400">No participants registered yet.</td></tr>

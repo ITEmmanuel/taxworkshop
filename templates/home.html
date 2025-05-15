@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to the MSU Tax Workshop{% endblock %}
+
+{% block content %}
+<div class="min-h-[85vh] w-full flex flex-col items-center justify-center bg-msublue">
+    <div class="max-w-xl w-full mx-auto text-center">
+        <img src="https://img.icons8.com/ios-filled/100/ffffff/bank-building.png" alt="Workshop" class="mx-auto mb-6 w-24 h-24 drop-shadow-lg"/>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow">Welcome to the MSU Tax Workshop</h1>
+        <p class="text-lg text-blue-50 mb-6">16th July 2025 &mdash; MSU Campus</p>
+        <div class="bg-white rounded-2xl shadow-xl p-8 mt-6">
+            <h2 class="text-2xl font-bold text-msublue mb-4">Banking Details</h2>
+            <table class="w-full text-md mb-4">
+                <tbody>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Account Name</td>
+                        <td class="py-2 text-gray-800">Midlands State University</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Bank Name</td>
+                        <td class="py-2 text-gray-800">ECOBANK</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Account No</td>
+                        <td class="py-2 text-gray-800">5783600005622</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Swift Code</td>
+                        <td class="py-2 text-gray-800">ECOCZWHX</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Branch Name</td>
+                        <td class="py-2 text-gray-800">KWEKWE</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="mb-2">
+                <span class="inline-block bg-msublue text-white rounded-full px-4 py-1 font-bold text-lg">Fee: $50</span>
+            </div>
+            <p class="text-gray-700 mt-2 text-sm">Use your full name as the payment reference. Keep proof of payment for registration.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

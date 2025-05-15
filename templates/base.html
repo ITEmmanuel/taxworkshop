@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tax Workshop{% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        msublue: '#08b4ec',
+                        msudark: '#067bb8',
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .btn {
+                @apply py-2 px-6 rounded font-semibold shadow transition-all duration-300 text-white bg-msublue hover:bg-msudark;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-msublue min-h-screen flex items-center justify-center relative">
+    <a href="{% url 'register' %}" class="absolute top-6 right-8 bg-white text-msublue font-bold px-5 py-2 rounded-full shadow hover:bg-blue-50 transition-all">Register</a>
+    <main class="w-full">
+        {% block content %}{% endblock %}
+    </main>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

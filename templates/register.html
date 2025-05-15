@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Register for Workshop{% endblock %}
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[80vh]">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-3xl">
+        <h2 class="text-2xl font-bold text-msublue mb-6 text-center">Register for the Workshop</h2>
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_full_name">Full Name</label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                </span>
+                <input type="text" name="full_name" id="id_full_name" maxlength="100" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Enter your full name" value="{{ form.full_name.value|default:'' }}">
+            </div>
+            {% if form.full_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.full_name.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_email">Email</label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0V8a4 4 0 10-8 0v4m8 0a4 4 0 01-8 0" /></svg>
+                </span>
+                <input type="email" name="email" id="id_email" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="you@email.com" value="{{ form.email.value|default:'' }}">
+            </div>
+            {% if form.email.errors %}<p class="text-red-500 text-xs mt-1">{{ form.email.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_bank">Paying Bank</label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10v6a1 1 0 001 1h16a1 1 0 001-1v-6M16 21V9a4 4 0 00-8 0v12" /></svg>
+                </span>
+                <input type="text" name="bank" id="id_bank" maxlength="100" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="e.g. Ecobank" value="{{ form.bank.value|default:'' }}">
+            </div>
+            {% if form.bank.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_from_account">From Account Number</label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3zm0 0V7m0 4v4" /></svg>
+                </span>
+                <input type="text" name="from_account" id="id_from_account" maxlength="50" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Account Number" value="{{ form.from_account.value|default:'' }}">
+            </div>
+            {% if form.from_account.errors %}<p class="text-red-500 text-xs mt-1">{{ form.from_account.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_payment_date">Payment Date</label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                </span>
+                <input type="date" name="payment_date" id="id_payment_date" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition bg-white" value="{{ form.payment_date.value|default:'' }}">
+            </div>
+            {% if form.payment_date.errors %}<p class="text-red-500 text-xs mt-1">{{ form.payment_date.errors }}</p>{% endif %}
+        </div>
+        <div class="md:col-span-2">
+            <label class="block font-semibold text-msublue mb-1" for="id_proof">Proof of Payment</label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                </span>
+                <input type="file" name="proof" id="id_proof" class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition bg-white" required>
+            </div>
+            {% if form.proof.errors %}<p class="text-red-500 text-xs mt-1">{{ form.proof.errors }}</p>{% endif %}
+        </div>
+    </div>
+    <button type="submit" class="btn w-full mt-4">Submit Registration</button>
+</form>
+    </div>
+</div>
+{% endblock %}

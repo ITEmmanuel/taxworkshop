@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Registration Successful{% endblock %}
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[80vh]">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md text-center">
+        <h2 class="text-2xl font-bold text-msublue mb-4">Thank You for Registering!</h2>
+        <p class="mb-4">Your registration has been received, {{ name }}.</p>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

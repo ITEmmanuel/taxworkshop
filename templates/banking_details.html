@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Banking Details | MSU Tax Workshop{% endblock %}
+
+{% block content %}
+<section class="flex flex-col items-center justify-center min-h-[60vh]">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg">
+        <div class="flex items-center mb-6">
+            <img src="https://img.icons8.com/ios-filled/50/08b4ec/bank-building.png" alt="Bank" class="w-12 h-12 mr-3"/>
+            <h2 class="text-2xl font-extrabold text-msublue">MSU Banking Details</h2>
+        </div>
+        <div class="bg-msublue/10 rounded-lg p-6 mb-4">
+            <table class="w-full text-md">
+                <tbody>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Account Name</td>
+                        <td class="py-2 text-gray-800">Midlands State University</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Bank Name</td>
+                        <td class="py-2 text-gray-800">ECOBANK</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Account No</td>
+                        <td class="py-2 text-gray-800">5783600005622</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Swift Code</td>
+                        <td class="py-2 text-gray-800">ECOCZWHX</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold text-msublue">Branch Name</td>
+                        <td class="py-2 text-gray-800">KWEKWE</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mb-4">
+            <h3 class="text-lg font-semibold text-msublue mb-2">Payment Notes</h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                <li>Use your full name as the payment reference.</li>
+                <li>Keep proof of payment for registration.</li>
+                <li>Fee: <span class="font-semibold text-msublue">$50</span> covers all materials, refreshments, and certification.</li>
+            </ul>
+        </div>
+        <a href="{% url 'home' %}" class="btn w-full mt-3">Back to Welcome Page</a>
+    </div>
+</section>
+{% endblock %}

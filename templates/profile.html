@@ -25,10 +25,28 @@
         </ul>
       {% endif %}
       <form method="post" class="space-y-6">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="w-full bg-msublue text-white py-2 rounded hover:bg-blue-800">Update Profile</button>
-      </form>
+  {% csrf_token %}
+  {% for field in form %}
+    <div>
+      <label class="block text-gray-700 text-sm font-medium mb-1">{{ field.label }}</label>
+      {{ field.errors }}
+      {{ field }}
+      <script>
+        // Add Tailwind classes to the field widget
+        (function() {
+          var input = document.getElementsByName('{{ field.name }}')[0];
+          if(input) {
+            input.classList.add('w-full','border','rounded-lg','px-4','py-2','focus:outline-none','focus:ring-2','focus:ring-blue-300','bg-gray-50','mb-1');
+          }
+        })();
+      </script>
+      {% if field.help_text %}
+        <p class="text-xs text-gray-400">{{ field.help_text }}</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button type="submit" class="w-full bg-msublue text-white py-2 rounded hover:bg-blue-800">Update Profile</button>
+</form>
       <hr class="my-6">
       <a href="{% url 'password_change' %}" class="block text-center text-blue-600 hover:underline">Change Password</a>
       <a href="{% url 'dashboard' %}" class="block text-center text-msublue mt-4 hover:underline">&larr; Back to Dashboard</a>

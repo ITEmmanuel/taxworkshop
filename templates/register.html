@@ -9,66 +9,85 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
             <label class="block font-semibold text-msublue mb-1" for="id_full_name">Full Name</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                </span>
-                <input type="text" name="full_name" id="id_full_name" maxlength="100" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Enter your full name" value="{{ form.full_name.value|default:'' }}">
-            </div>
+            <input type="text" name="full_name" id="id_full_name" maxlength="100" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Enter your full name" value="{{ form.full_name.value|default:'' }}">
             {% if form.full_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.full_name.errors }}</p>{% endif %}
         </div>
         <div>
-            <label class="block font-semibold text-msublue mb-1" for="id_email">Email</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0V8a4 4 0 10-8 0v4m8 0a4 4 0 01-8 0" /></svg>
-                </span>
-                <input type="email" name="email" id="id_email" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="you@email.com" value="{{ form.email.value|default:'' }}">
-            </div>
+            <label class="block font-semibold text-msublue mb-1" for="id_email">Email Address</label>
+            <input type="email" name="email" id="id_email" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="you@email.com" value="{{ form.email.value|default:'' }}">
             {% if form.email.errors %}<p class="text-red-500 text-xs mt-1">{{ form.email.errors }}</p>{% endif %}
         </div>
         <div>
-            <label class="block font-semibold text-msublue mb-1" for="id_bank">Paying Bank</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10v6a1 1 0 001 1h16a1 1 0 001-1v-6M16 21V9a4 4 0 00-8 0v12" /></svg>
-                </span>
-                <input type="text" name="bank" id="id_bank" maxlength="100" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="e.g. Ecobank" value="{{ form.bank.value|default:'' }}">
-            </div>
-            {% if form.bank.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank.errors }}</p>{% endif %}
+            <label class="block font-semibold text-msublue mb-1" for="id_phone">Phone Number</label>
+            <input type="tel" name="phone" id="id_phone" class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Phone number" value="{{ form.phone.value|default:'' }}">
+            {% if form.phone.errors %}<p class="text-red-500 text-xs mt-1">{{ form.phone.errors }}</p>{% endif %}
         </div>
         <div>
-            <label class="block font-semibold text-msublue mb-1" for="id_from_account">From Account Number</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3zm0 0V7m0 4v4" /></svg>
-                </span>
-                <input type="text" name="from_account" id="id_from_account" maxlength="50" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Account Number" value="{{ form.from_account.value|default:'' }}">
-            </div>
-            {% if form.from_account.errors %}<p class="text-red-500 text-xs mt-1">{{ form.from_account.errors }}</p>{% endif %}
+            <label class="block font-semibold text-msublue mb-1" for="id_organization">Organization/Institution</label>
+            <input type="text" name="organization" id="id_organization" maxlength="150" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Organization" value="{{ form.organization.value|default:'' }}">
+            {% if form.organization.errors %}<p class="text-red-500 text-xs mt-1">{{ form.organization.errors }}</p>{% endif %}
         </div>
         <div>
-            <label class="block font-semibold text-msublue mb-1" for="id_payment_date">Payment Date</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                </span>
-                <input type="date" name="payment_date" id="id_payment_date" required class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition bg-white" value="{{ form.payment_date.value|default:'' }}">
-            </div>
+            <label class="block font-semibold text-msublue mb-1" for="id_title">Job Title/Position</label>
+            <input type="text" name="title" id="id_title" maxlength="100" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Title/Position" value="{{ form.title.value|default:'' }}">
+            {% if form.title.errors %}<p class="text-red-500 text-xs mt-1">{{ form.title.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_city">City/Town</label>
+            <input type="text" name="city" id="id_city" class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="City/Town" value="{{ form.city.value|default:'' }}">
+            {% if form.city.errors %}<p class="text-red-500 text-xs mt-1">{{ form.city.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_country">Country</label>
+            <input type="text" name="country" id="id_country" class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Country" value="{{ form.country.value|default:'' }}">
+            {% if form.country.errors %}<p class="text-red-500 text-xs mt-1">{{ form.country.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1">Workshop</label>
+            <input type="text" value="Tax Workshop on TARMS" readonly class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 bg-gray-100">
+            <input type="hidden" name="workshop" value="Tax Workshop on TARMS">
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1">Payment Method</label>
+            <label><input type="radio" name="payment_method" value="bankTransfer" checked> Bank Transfer</label>
+            <input type="hidden" name="payment_method" value="bankTransfer">
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_bank_name">Bank Name</label>
+            <input type="text" name="bank_name" id="id_bank_name" class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Bank Name" value="{{ form.bank_name.value|default:'' }}">
+            {% if form.bank_name.errors %}<p class="text-red-500 text-xs mt-1">{{ form.bank_name.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_account_holder">Account Holder Name</label>
+            <input type="text" name="account_holder" id="id_account_holder" class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Account Holder Name" value="{{ form.account_holder.value|default:'' }}">
+            {% if form.account_holder.errors %}<p class="text-red-500 text-xs mt-1">{{ form.account_holder.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_transaction_ref">Transaction Reference Number/Deposit Slip Number</label>
+            <input type="text" name="transaction_ref" id="id_transaction_ref" maxlength="100" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Reference Number" value="{{ form.transaction_ref.value|default:'' }}">
+            {% if form.transaction_ref.errors %}<p class="text-red-500 text-xs mt-1">{{ form.transaction_ref.errors }}</p>{% endif %}
+        </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_payment_date">Date of Payment</label>
+            <input type="date" name="payment_date" id="id_payment_date" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition bg-white" value="{{ form.payment_date.value|default:'' }}">
             {% if form.payment_date.errors %}<p class="text-red-500 text-xs mt-1">{{ form.payment_date.errors }}</p>{% endif %}
         </div>
+        <div>
+            <label class="block font-semibold text-msublue mb-1" for="id_amount_paid">Amount Paid (ZWL)</label>
+            <input type="number" name="amount_paid" id="id_amount_paid" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Amount Paid" value="{{ form.amount_paid.value|default:'' }}">
+            {% if form.amount_paid.errors %}<p class="text-red-500 text-xs mt-1">{{ form.amount_paid.errors }}</p>{% endif %}
+        </div>
         <div class="md:col-span-2">
-            <label class="block font-semibold text-msublue mb-1" for="id_proof">Proof of Payment</label>
-            <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-msublue">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                </span>
-                <input type="file" name="proof" id="id_proof" class="pl-10 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition bg-white" required>
-            </div>
-            {% if form.proof.errors %}<p class="text-red-500 text-xs mt-1">{{ form.proof.errors }}</p>{% endif %}
+            <label class="block font-semibold text-msublue mb-1" for="id_proof_of_payment">Proof of Payment (JPG, PNG, PDF)</label>
+            <input type="file" name="proof_of_payment" id="id_proof_of_payment" accept=".jpg,.jpeg,.png,.pdf" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition bg-white">
+            {% if form.proof_of_payment.errors %}<p class="text-red-500 text-xs mt-1">{{ form.proof_of_payment.errors }}</p>{% endif %}
+        </div>
+        <div class="md:col-span-2">
+            <label><input type="checkbox" name="terms" required {% if form.terms.value %}checked{% endif %}> I agree to the <a href="/terms" target="_blank">terms and conditions</a>.</label>
+            {% if form.terms.errors %}<p class="text-red-500 text-xs mt-1">{{ form.terms.errors }}</p>{% endif %}
         </div>
     </div>
-    <button type="submit" class="btn w-full mt-4">Submit Registration</button>
+    <button type="submit" class="btn w-full mt-4">Register</button>
 </form>
     </div>
 </div>

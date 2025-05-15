@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Register for Workshop{% endblock %}
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-[80vh]">
-    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-3xl">
+<div class="flex flex-col items-center justify-center py-12">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl mx-auto" style="max-height: 90vh; overflow-y: auto;">
         <h2 class="text-2xl font-bold text-msublue mb-6 text-center">Register for the Workshop</h2>
         <form method="post" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}

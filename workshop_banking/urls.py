@@ -21,5 +21,8 @@ from workshop_app import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('register/', views.register, name='register'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/edit/<int:pk>/', views.dashboard_edit, name='dashboard_edit'),
+    path('dashboard/delete/<int:pk>/', views.dashboard_delete, name='dashboard_delete'),
     path('admin/', admin.site.urls),
 ]

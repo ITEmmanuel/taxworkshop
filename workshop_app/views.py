@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from django import forms
 from django.http import HttpResponseRedirect
@@ -58,3 +58,30 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
+
+def dashboard(request):
+    participants = Participant.objects.all().order_by('-registered_at')
+    return render(request, 'dashboard.html', {'participants': participants})
+
+def dashboard_edit(request, pk):
+    participant = get_object_or_404(Participant, pk=pk)
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            for field in form.cleaned_data:
+                setattr(participant, field, form.cleaned_data[field])
+            if 'proof_of_payment' in request.FILES:
+                participant.proof_of_payment = request.FILES['proof_of_payment']
+            participant.save()
+            return redirect('dashboard')
+    else:
+        initial = {field: getattr(participant, field) for field in RegistrationForm.base_fields}
+        form = RegistrationForm(initial=initial)
+    return render(request, 'register.html', {'form': form, 'edit_mode': True, 'participant': participant})
+
+def dashboard_delete(request, pk):
+    participant = get_object_or_404(Participant, pk=pk)
+    if request.method == 'POST':
+        participant.delete()
+        return redirect('dashboard')
+    return render(request, 'register.html', {'form': None, 'delete_confirm': True, 'participant': participant})

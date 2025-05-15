@@ -37,8 +37,32 @@ class RegistrationForm(forms.Form):
 from .models import Participant
 
 def register(request):
-    # Registration disabled from frontend
-    return redirect('login')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            participant = Participant(
+                full_name=form.cleaned_data['full_name'],
+                email=form.cleaned_data['email'],
+                phone=form.cleaned_data['phone'],
+                organization=form.cleaned_data['organization'],
+                title=form.cleaned_data['title'],
+                city=form.cleaned_data['city'],
+                country=form.cleaned_data['country'],
+                workshop=form.cleaned_data['workshop'],
+                payment_method=form.cleaned_data['payment_method'],
+                bank_name=form.cleaned_data['bank_name'],
+                account_holder=form.cleaned_data['account_holder'],
+                transaction_ref=form.cleaned_data['transaction_ref'],
+                payment_date=form.cleaned_data['payment_date'],
+                amount_paid=form.cleaned_data['amount_paid'],
+                proof_of_payment=form.cleaned_data['proof_of_payment'],
+                terms=form.cleaned_data['terms'],
+            )
+            participant.save()
+            return render(request, 'register_success.html', {'name': participant.full_name})
+    else:
+        form = RegistrationForm()
+    return render(request, 'register.html', {'form': form})
 
 @login_required
 def dashboard(request):

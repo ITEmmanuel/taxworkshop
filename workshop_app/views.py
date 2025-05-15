@@ -128,15 +128,18 @@ def logout_view(request):
     return redirect('login')
 
 
+from django.contrib import messages
+
 @login_required
 def profile_view(request):
     if request.method == 'POST':
-        form = UserChangeForm(request.user, request.POST)
+        form = UserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Profile updated successfully!')
             return redirect('profile')
     else:
-        form = UserChangeForm(request.user)
+        form = UserChangeForm(instance=request.user)
     return render(request, 'profile.html', {'form': form})
 
 

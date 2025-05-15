@@ -1,71 +1,81 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="container mx-auto py-10">
-    <div class="flex justify-between mb-6 items-center">
-        <h2 class="text-3xl font-bold text-msublue">Registered Participants</h2>
-        <div class="flex gap-2">
-            <a href="{% url 'profile' %}" class="bg-msublue text-white px-4 py-2 rounded hover:bg-blue-800">Profile</a>
-            <a href="{% url 'logout' %}" class="bg-gray-200 text-msublue px-4 py-2 rounded hover:bg-blue-100">Logout</a>
-        </div>
+<div class="flex min-h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg hidden md:block">
+    <div class="p-6 border-b">
+      <h2 class="text-2xl font-bold text-msublue">Admin Dashboard</h2>
     </div>
-    <form method="get" class="flex flex-wrap gap-4 items-end mb-6">
+    <nav class="mt-6">
+      <a href="{% url 'dashboard' %}" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded transition">Participants</a>
+      <a href="{% url 'profile' %}" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 rounded transition">Profile</a>
+      <a href="{% url 'logout' %}" class="block px-6 py-3 text-red-600 hover:bg-red-50 rounded transition">Logout</a>
+    </nav>
+  </aside>
+  <!-- Main Content -->
+  <main class="flex-1 p-6">
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+      <h2 class="text-3xl font-bold text-msublue">Registered Participants</h2>
+      <form method="get" class="flex flex-wrap gap-4 items-end">
         <div>
-            <label class="block text-gray-700 text-sm mb-1">Organization</label>
-            <select name="organization" class="border rounded px-3 py-2">
-                <option value="">All</option>
-                {% for org in orgs %}
-                    <option value="{{ org }}" {% if org == selected_org %}selected{% endif %}>{{ org }}</option>
-                {% endfor %}
-            </select>
+          <label class="block text-gray-700 text-sm mb-1">Organization</label>
+          <select name="organization" class="border rounded px-3 py-2">
+            <option value="">All</option>
+            {% for org in orgs %}
+              <option value="{{ org }}" {% if org == selected_org %}selected{% endif %}>{{ org }}</option>
+            {% endfor %}
+          </select>
         </div>
         <div>
-            <label class="block text-gray-700 text-sm mb-1">Payment Date</label>
-            <input type="date" name="payment_date" value="{{ selected_date }}" class="border rounded px-3 py-2">
+          <label class="block text-gray-700 text-sm mb-1">Payment Date</label>
+          <input type="date" name="payment_date" value="{{ selected_date }}" class="border rounded px-3 py-2">
         </div>
         <button type="submit" class="bg-msublue text-white px-4 py-2 rounded hover:bg-blue-800">Filter</button>
-    </form>
-    <div class="overflow-x-auto bg-white shadow rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-4 py-2">Name</th>
-                    <th class="px-4 py-2">Email</th>
-                    <th class="px-4 py-2">Phone</th>
-                    <th class="px-4 py-2">Organization</th>
-                    <th class="px-4 py-2">Amount Paid</th>
-                    <th class="px-4 py-2">Date</th>
-                    <th class="px-4 py-2">Proof</th>
-                    <th class="px-4 py-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for participant in participants %}
-                <tr class="border-b">
-                    <td class="px-4 py-2">{{ participant.full_name }}</td>
-                    <td class="px-4 py-2">{{ participant.email }}</td>
-                    <td class="px-4 py-2">{{ participant.phone }}</td>
-                    <td class="px-4 py-2">{{ participant.organization }}</td>
-                    <td class="px-4 py-2">{{ participant.amount_paid }}</td>
-                    <td class="px-4 py-2">{{ participant.payment_date }}</td>
-                    <td class="px-4 py-2">
-                        {% if participant.proof_of_payment %}
-                        <a href="{{ participant.proof_of_payment.url }}" target="_blank" class="text-blue-600 hover:underline">View</a>
-                        {% else %}-{% endif %}
-                    </td>
-                    <td class="px-4 py-2 flex gap-2">
-                        <a href="{% url 'dashboard_edit' participant.id %}" class="text-blue-600 hover:underline">Edit</a>
-                        <form method="post" action="{% url 'dashboard_delete' participant.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="text-red-600 hover:underline" onclick="return confirm('Are you sure you want to delete this participant?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="8" class="text-center py-6">No participants registered yet.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
+      </form>
     </div>
+    <div class="overflow-x-auto bg-white shadow-lg rounded-xl">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-blue-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Name</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Email</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Phone</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Organization</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Amount Paid</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Proof</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          {% for participant in participants %}
+          <tr class="hover:bg-blue-50 transition">
+            <td class="px-6 py-4 whitespace-nowrap">{{ participant.full_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ participant.email }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ participant.phone }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ participant.organization }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ participant.amount_paid }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ participant.payment_date }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if participant.proof_of_payment %}
+                <a href="{{ participant.proof_of_payment.url }}" target="_blank" class="text-blue-600 hover:underline">View</a>
+              {% else %}-{% endif %}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+              <a href="{% url 'dashboard_edit' participant.id %}" class="text-blue-600 hover:underline">Edit</a>
+              <form method="post" action="{% url 'dashboard_delete' participant.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="text-red-600 hover:underline" onclick="return confirm('Are you sure you want to delete this participant?');">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="text-center py-8 text-gray-400">No participants registered yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
 </div>
 {% endblock %}

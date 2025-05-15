@@ -3,6 +3,11 @@ from datetime import datetime
 from django import forms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 import os
 
 def home(request):
@@ -32,37 +37,29 @@ class RegistrationForm(forms.Form):
 from .models import Participant
 
 def register(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST, request.FILES)
-        if form.is_valid():
-            participant = Participant(
-                full_name=form.cleaned_data['full_name'],
-                email=form.cleaned_data['email'],
-                phone=form.cleaned_data.get('phone', ''),
-                organization=form.cleaned_data['organization'],
-                title=form.cleaned_data['title'],
-                city=form.cleaned_data.get('city', ''),
-                country=form.cleaned_data.get('country', ''),
-                workshop=form.cleaned_data['workshop'],
-                payment_method=form.cleaned_data['payment_method'],
-                bank_name=form.cleaned_data.get('bank_name', ''),
-                account_holder=form.cleaned_data.get('account_holder', ''),
-                transaction_ref=form.cleaned_data['transaction_ref'],
-                payment_date=form.cleaned_data['payment_date'],
-                amount_paid=form.cleaned_data['amount_paid'],
-                proof_of_payment=form.cleaned_data['proof_of_payment'],
-                terms=form.cleaned_data['terms']
-            )
-            participant.save()
-            return render(request, 'register_success.html', {'name': form.cleaned_data['full_name']})
-    else:
-        form = RegistrationForm()
-    return render(request, 'register.html', {'form': form})
+    # Registration disabled from frontend
+    return redirect('login')
 
+@login_required
 def dashboard(request):
-    participants = Participant.objects.all().order_by('-registered_at')
-    return render(request, 'dashboard.html', {'participants': participants})
+    # Filtering
+    org = request.GET.get('organization', '')
+    payment_date = request.GET.get('payment_date', '')
+    participants = Participant.objects.all()
+    if org:
+        participants = participants.filter(organization__icontains=org)
+    if payment_date:
+        participants = participants.filter(payment_date=payment_date)
+    participants = participants.order_by('-registered_at')
+    orgs = Participant.objects.values_list('organization', flat=True).distinct()
+    return render(request, 'dashboard.html', {
+        'participants': participants,
+        'orgs': orgs,
+        'selected_org': org,
+        'selected_date': payment_date
+    })
 
+@login_required
 def dashboard_edit(request, pk):
     participant = get_object_or_404(Participant, pk=pk)
     if request.method == 'POST':
@@ -79,9 +76,59 @@ def dashboard_edit(request, pk):
         form = RegistrationForm(initial=initial)
     return render(request, 'register.html', {'form': form, 'edit_mode': True, 'participant': participant})
 
+@login_required
 def dashboard_delete(request, pk):
     participant = get_object_or_404(Participant, pk=pk)
     if request.method == 'POST':
         participant.delete()
         return redirect('dashboard')
     return render(request, 'register.html', {'form': None, 'delete_confirm': True, 'participant': participant})
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        form = UserChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserChangeForm(request.user)
+    return render(request, 'profile.html', {'form': form})
+
+
+@login_required
+def password_change_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('password_change_done')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'password_change.html', {'form': form})
+
+
+@login_required
+def password_change_done_view(request):
+    return render(request, 'password_change_done.html')

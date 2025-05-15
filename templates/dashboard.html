@@ -2,10 +2,29 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <div class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold mb-6 text-center text-msublue">Registered Participants</h2>
-    <div class="flex justify-end mb-4">
-        <a href="{% url 'register' %}" class="bg-msublue text-white px-4 py-2 rounded hover:bg-blue-800">Add New</a>
+    <div class="flex justify-between mb-6 items-center">
+        <h2 class="text-3xl font-bold text-msublue">Registered Participants</h2>
+        <div class="flex gap-2">
+            <a href="{% url 'profile' %}" class="bg-msublue text-white px-4 py-2 rounded hover:bg-blue-800">Profile</a>
+            <a href="{% url 'logout' %}" class="bg-gray-200 text-msublue px-4 py-2 rounded hover:bg-blue-100">Logout</a>
+        </div>
     </div>
+    <form method="get" class="flex flex-wrap gap-4 items-end mb-6">
+        <div>
+            <label class="block text-gray-700 text-sm mb-1">Organization</label>
+            <select name="organization" class="border rounded px-3 py-2">
+                <option value="">All</option>
+                {% for org in orgs %}
+                    <option value="{{ org }}" {% if org == selected_org %}selected{% endif %}>{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label class="block text-gray-700 text-sm mb-1">Payment Date</label>
+            <input type="date" name="payment_date" value="{{ selected_date }}" class="border rounded px-3 py-2">
+        </div>
+        <button type="submit" class="bg-msublue text-white px-4 py-2 rounded hover:bg-blue-800">Filter</button>
+    </form>
     <div class="overflow-x-auto bg-white shadow rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -16,6 +35,7 @@
                     <th class="px-4 py-2">Organization</th>
                     <th class="px-4 py-2">Amount Paid</th>
                     <th class="px-4 py-2">Date</th>
+                    <th class="px-4 py-2">Proof</th>
                     <th class="px-4 py-2">Actions</th>
                 </tr>
             </thead>
@@ -28,6 +48,11 @@
                     <td class="px-4 py-2">{{ participant.organization }}</td>
                     <td class="px-4 py-2">{{ participant.amount_paid }}</td>
                     <td class="px-4 py-2">{{ participant.payment_date }}</td>
+                    <td class="px-4 py-2">
+                        {% if participant.proof_of_payment %}
+                        <a href="{{ participant.proof_of_payment.url }}" target="_blank" class="text-blue-600 hover:underline">View</a>
+                        {% else %}-{% endif %}
+                    </td>
                     <td class="px-4 py-2 flex gap-2">
                         <a href="{% url 'dashboard_edit' participant.id %}" class="text-blue-600 hover:underline">Edit</a>
                         <form method="post" action="{% url 'dashboard_delete' participant.id %}" style="display:inline;">
@@ -37,7 +62,7 @@
                     </td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="7" class="text-center py-6">No participants registered yet.</td></tr>
+                <tr><td colspan="8" class="text-center py-6">No participants registered yet.</td></tr>
                 {% endfor %}
             </tbody>
         </table>

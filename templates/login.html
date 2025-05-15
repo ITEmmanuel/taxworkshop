@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="flex flex-col items-center justify-center py-20">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm mx-auto">
+        <h2 class="text-2xl font-bold text-msublue mb-6 text-center">Admin Login</h2>
+        {% if form.errors %}
+        <div class="mb-4 text-red-600 text-center">Invalid username or password.</div>
+        {% endif %}
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="username" class="block text-gray-700">Username</label>
+                <input type="text" name="username" class="mt-1 w-full border rounded px-3 py-2" required autofocus>
+            </div>
+            <div>
+                <label for="password" class="block text-gray-700">Password</label>
+                <input type="password" name="password" class="mt-1 w-full border rounded px-3 py-2" required>
+            </div>
+            <button type="submit" class="w-full bg-msublue text-white py-2 rounded hover:bg-blue-800">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

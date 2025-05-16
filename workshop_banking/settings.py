@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h#mb%jr0ag9dme8xq_sl2z)8-r4=ddf%mt2y-%4depl^4d(i)t'
 
 import os
+from dotenv import load_dotenv
+load_dotenv()
 import dj_database_url
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -107,13 +109,10 @@ WSGI_APPLICATION = 'workshop_banking.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(
+    default=f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

@@ -73,7 +73,7 @@
             {% if form.payment_date.errors %}<p class="text-red-500 text-xs mt-1">{{ form.payment_date.errors }}</p>{% endif %}
         </div>
         <div>
-            <label class="block font-semibold text-msublue mb-1" for="id_amount_paid">Amount Paid (ZWL)</label>
+            <label class="block font-semibold text-msublue mb-1" for="id_amount_paid">Amount Paid (USD)</label>
             <input type="number" name="amount_paid" id="id_amount_paid" required class="pl-3 pr-4 py-2 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-msublue transition" placeholder="Amount Paid" value="{{ form.amount_paid.value|default:'' }}">
             {% if form.amount_paid.errors %}<p class="text-red-500 text-xs mt-1">{{ form.amount_paid.errors }}</p>{% endif %}
         </div>

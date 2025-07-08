@@ -73,18 +73,46 @@ def dashboard(request):
     # Filtering
     org = request.GET.get('organization', '')
     payment_date = request.GET.get('payment_date', '')
+    status = request.GET.get('status', '')
+    
     participants = Participant.objects.all()
     if org:
         participants = participants.filter(organization__icontains=org)
     if payment_date:
         participants = participants.filter(payment_date=payment_date)
+    if status:
+        participants = participants.filter(payment_status=status)
+        
     participants = participants.order_by('-registered_at')
+    
+    # Get distinct organizations and payment statuses for filtering
     orgs = Participant.objects.values_list('organization', flat=True).distinct()
+    statuses = Participant.objects.values_list('payment_status', flat=True).distinct()
+    
+    # Get summary stats
+    total_participants = participants.count()
+    pending_count = participants.filter(payment_status='pending').count()
+    approved_count = participants.filter(payment_status='approved').count()
+    declined_count = participants.filter(payment_status='declined').count()
+    
+    # Calculate total amount paid (approved payments)
+    from django.db.models import Sum
+    total_amount = participants.filter(payment_status='approved').aggregate(Sum('amount_paid'))
+    
     return render(request, 'dashboard.html', {
         'participants': participants,
         'orgs': orgs,
+        'statuses': statuses,
         'selected_org': org,
-        'selected_date': payment_date
+        'selected_date': payment_date,
+        'selected_status': status,
+        'stats': {
+            'total': total_participants,
+            'pending': pending_count,
+            'approved': approved_count,
+            'declined': declined_count,
+            'total_amount': total_amount['amount_paid__sum'] or 0
+        }
     })
 
 @login_required

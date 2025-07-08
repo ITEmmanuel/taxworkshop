@@ -15,6 +15,65 @@
   </aside>
   <!-- Main Content -->
   <main class="flex-1 p-6">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Total Participants</p>
+            <p class="text-2xl font-bold text-gray-700">{{ stats.total }}</p>
+          </div>
+          <div class="bg-blue-100 rounded-full p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Pending Payments</p>
+            <p class="text-2xl font-bold text-gray-700">{{ stats.pending }}</p>
+          </div>
+          <div class="bg-yellow-100 rounded-full p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Approved Payments</p>
+            <p class="text-2xl font-bold text-gray-700">{{ stats.approved }}</p>
+          </div>
+          <div class="bg-green-100 rounded-full p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Total Amount (ZWL)</p>
+            <p class="text-2xl font-bold text-gray-700">{{ stats.total_amount|floatformat:2 }}</p>
+          </div>
+          <div class="bg-indigo-100 rounded-full p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
       <h2 class="text-3xl font-bold text-msublue">Registered Participants</h2>
       <form method="get" class="flex flex-wrap gap-4 items-end">
@@ -31,7 +90,19 @@
           <label class="block text-gray-700 text-sm mb-1">Payment Date</label>
           <input type="date" name="payment_date" value="{{ selected_date }}" class="border rounded px-3 py-2">
         </div>
+        <div>
+          <label class="block text-gray-700 text-sm mb-1">Status</label>
+          <select name="status" class="border rounded px-3 py-2">
+            <option value="">All</option>
+            {% for status in statuses %}
+              <option value="{{ status }}" {% if status == selected_status %}selected{% endif %}>
+                {{ status|title }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
         <button type="submit" class="bg-msublue text-white px-4 py-2 rounded hover:bg-blue-800">Filter</button>
+        <a href="{% url 'dashboard' %}" class="px-4 py-2 border border-gray-300 rounded text-gray-600 hover:bg-gray-100">Reset</a>
       </form>
     </div>
     <div class="overflow-x-auto bg-white shadow-lg rounded-xl">
@@ -59,7 +130,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ participant.payment_date }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
               {% if participant.proof_of_payment %}
-                <a href="{{ participant.proof_file_url }}" target="_blank" class="text-blue-600 hover:underline">View</a>
+                <button onclick="showProofModal('{{ participant.full_name }}', '{{ participant.transaction_ref }}')" class="text-blue-600 hover:underline cursor-pointer">View Details</button>
               {% else %}-{% endif %}
             </td>
             <td class="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
@@ -95,5 +166,55 @@
       </table>
     </div>
   </main>
+
+  <!-- Proof Details Modal -->
+  <div id="proofModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+      <div class="border-b px-6 py-3 flex items-center justify-between">
+        <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Payment Details</h3>
+        <button type="button" onclick="closeProofModal()" class="text-gray-400 hover:text-gray-500">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="px-6 py-4">
+        <div class="mb-4">
+          <p class="text-sm text-gray-500">Payment information for:</p>
+          <p class="font-medium text-lg" id="participantName"></p>
+        </div>
+        <div class="mb-4">
+          <p class="text-sm text-gray-500">Transaction Reference:</p>
+          <p class="font-medium" id="transactionRef"></p>
+        </div>
+        <div class="mb-4">
+          <p class="text-sm text-gray-500">Note about proof of payment:</p>
+          <p>Due to system constraints, the actual proof of payment file cannot be displayed directly. Please verify the payment using the transaction reference number above.</p>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-6 py-3 flex justify-end">
+        <button type="button" onclick="closeProofModal()" class="bg-msublue text-white px-4 py-2 rounded hover:bg-blue-700">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+
+{% block extra_js %}
+<script>
+  function showProofModal(name, transactionRef) {
+    document.getElementById('participantName').textContent = name;
+    document.getElementById('transactionRef').textContent = transactionRef;
+    document.getElementById('proofModal').classList.remove('hidden');
+    document.getElementById('proofModal').classList.add('flex');
+  }
+  
+  function closeProofModal() {
+    document.getElementById('proofModal').classList.add('hidden');
+    document.getElementById('proofModal').classList.remove('flex');
+  }
+</script>
+{% endblock %}
+
 {% endblock %}

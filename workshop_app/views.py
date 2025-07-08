@@ -211,19 +211,32 @@ def serve_proof_file(request, filename):
     if '..' in filename or filename.startswith('/'):
         raise Http404("Invalid file path")
     
-    # First check the media directory
-    media_path = os.path.join(settings.MEDIA_ROOT, 'proofs', filename)
+    # Try various potential locations where the file might be stored
+    potential_paths = [
+        # Media directory with proofs subdirectory (standard Django media setup)
+        os.path.join(settings.MEDIA_ROOT, 'proofs', filename),
+        
+        # Direct in media root (in case uploads bypass subdirectory)
+        os.path.join(settings.MEDIA_ROOT, filename),
+        
+        # Root proofs directory (for backward compatibility)
+        os.path.join(settings.BASE_DIR, 'proofs', filename),
+        
+        # In case files were uploaded directly to proofs/ in the project root
+        os.path.join(settings.BASE_DIR, 'media', 'proofs', filename)
+    ]
     
-    # If not found, check the root proofs directory (for backward compatibility)
-    root_proofs_path = os.path.join(settings.BASE_DIR, 'proofs', filename)
-    
+    # Try to find the file in any of the potential locations
     file_path = None
-    if os.path.exists(media_path) and os.path.isfile(media_path):
-        file_path = media_path
-    elif os.path.exists(root_proofs_path) and os.path.isfile(root_proofs_path):
-        file_path = root_proofs_path
+    for path in potential_paths:
+        if os.path.exists(path) and os.path.isfile(path):
+            file_path = path
+            break
     
     if file_path:
+        # Log the successful file path for debugging
+        print(f"Found proof file at: {file_path}")
+        
         content_type, encoding = mimetypes.guess_type(file_path)
         content_type = content_type or 'application/octet-stream'
         
@@ -234,4 +247,7 @@ def serve_proof_file(request, filename):
         except IOError:
             raise Http404("File not accessible")
     else:
+        # Log the attempted paths for debugging
+        print(f"Failed to find proof file: {filename}")
+        print(f"Attempted paths: {potential_paths}")
         raise Http404("File not found")

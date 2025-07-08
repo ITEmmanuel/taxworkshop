@@ -1,6 +1,6 @@
 from django.db import models
-
-from django.db import models
+from django.conf import settings
+import os
 
 class Participant(models.Model):
     PAYMENT_STATUS_CHOICES = [
@@ -29,3 +29,17 @@ class Participant(models.Model):
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"
+        
+    @property
+    def proof_file_url(self):
+        """Return the URL for the proof of payment file."""
+        if not self.proof_of_payment:
+            return None
+            
+        # In development, use the normal file URL
+        if settings.DEBUG:
+            return self.proof_of_payment.url
+        
+        # In production, use our custom URL pattern
+        filename = os.path.basename(self.proof_of_payment.name)
+        return f"/proofs/{filename}"

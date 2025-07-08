@@ -149,10 +149,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Create static directory if it doesn't exist
+import os
+static_dir = os.path.join(BASE_DIR, 'static')
+if not os.path.exists(static_dir):
+    os.makedirs(static_dir)
+
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    static_dir,
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

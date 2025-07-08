@@ -1,0 +1,25 @@
+/* Main styles for Tax Workshop */
+.msublue {
+    color: #08b4ec;
+}
+
+.msudark {
+    color: #067bb8;
+}
+
+.bg-msublue {
+    background-color: #08b4ec;
+}
+
+.bg-msudark {
+    background-color: #067bb8;
+}
+
+/* Custom animations */
+.hover-scale {
+    transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}

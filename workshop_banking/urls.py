@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from workshop_app import views
 
 urlpatterns = [
@@ -32,3 +34,12 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('admin/', admin.site.urls),
 ]
+
+# Add media file serving in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    # In production, add a dedicated URL pattern to serve proof files
+    urlpatterns += [
+        path('proofs/<str:filename>', views.serve_proof_file, name='serve_proof_file'),
+    ]

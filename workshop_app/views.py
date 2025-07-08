@@ -1,13 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse, Http404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.conf import settings
+import os
+import mimetypes
 import os
 import requests
 
@@ -200,3 +203,35 @@ def password_change_view(request):
 @login_required
 def password_change_done_view(request):
     return render(request, 'password_change_done.html')
+
+
+def serve_proof_file(request, filename):
+    """Serve proof of payment files"""
+    # Validate the filename to prevent directory traversal attacks
+    if '..' in filename or filename.startswith('/'):
+        raise Http404("Invalid file path")
+    
+    # First check the media directory
+    media_path = os.path.join(settings.MEDIA_ROOT, 'proofs', filename)
+    
+    # If not found, check the root proofs directory (for backward compatibility)
+    root_proofs_path = os.path.join(settings.BASE_DIR, 'proofs', filename)
+    
+    file_path = None
+    if os.path.exists(media_path) and os.path.isfile(media_path):
+        file_path = media_path
+    elif os.path.exists(root_proofs_path) and os.path.isfile(root_proofs_path):
+        file_path = root_proofs_path
+    
+    if file_path:
+        content_type, encoding = mimetypes.guess_type(file_path)
+        content_type = content_type or 'application/octet-stream'
+        
+        try:
+            response = FileResponse(open(file_path, 'rb'), content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+        except IOError:
+            raise Http404("File not accessible")
+    else:
+        raise Http404("File not found")
